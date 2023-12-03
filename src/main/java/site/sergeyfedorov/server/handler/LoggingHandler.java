@@ -10,7 +10,7 @@ public class LoggingHandler extends ChannelInboundHandlerAdapter {
 
     private final boolean displayContents;
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggingHandler.class)
+    private static final Logger logger = LoggerFactory.getLogger(LoggingHandler.class);
 
     public LoggingHandler(Boolean displayContents) {
         this.displayContents = displayContents;
