@@ -4,9 +4,9 @@ import org.slf4j.LoggerFactory;
 import site.sergeyfedorov.emv.model.EMVTransmission;
 import site.sergeyfedorov.emv.server.EMVServer;
 import site.sergeyfedorov.emv.server.handler.FunctionApplyingHandler;
-import site.sergeyfedorov.transactions.TransactionsParser;
-import site.sergeyfedorov.transactions.model.Transaction;
-import site.sergeyfedorov.transactions.repr.TransactionBeautifier;
+import site.sergeyfedorov.transaction.TransactionsParser;
+import site.sergeyfedorov.transaction.model.Transaction;
+import site.sergeyfedorov.transaction.repr.TransactionBeautifier;
 
 import java.util.Arrays;
 
@@ -25,7 +25,7 @@ public class Main {
             ));
 
         try {
-            server.run();
+            server.run().sync();
         } catch (InterruptedException e) {
             LoggerFactory.getLogger(Main.class).error("Server interrupted", e);
         }

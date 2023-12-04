@@ -1,11 +1,11 @@
-package site.sergeyfedorov.transactions;
+package site.sergeyfedorov.transaction;
 
 import site.sergeyfedorov.emv.model.EMVMessage;
 import site.sergeyfedorov.emv.model.tag.EMVTag;
 import site.sergeyfedorov.emv.model.tag.EMVTagId;
 import site.sergeyfedorov.emv.model.EMVTransmission;
-import site.sergeyfedorov.transactions.model.Kernel;
-import site.sergeyfedorov.transactions.model.Transaction;
+import site.sergeyfedorov.transaction.model.Kernel;
+import site.sergeyfedorov.transaction.model.Transaction;
 import site.sergeyfedorov.util.currency.CurrencyFinder;
 
 import java.math.BigDecimal;

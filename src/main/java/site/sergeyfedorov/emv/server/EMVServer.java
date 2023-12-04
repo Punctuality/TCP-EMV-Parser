@@ -58,7 +58,7 @@ public class EMVServer {
         return b;
     }
 
-    public void run() throws InterruptedException {
+    public ChannelFuture run() throws InterruptedException {
         ServerBootstrap serverTemplate = setupServer();
 
         ChannelFuture f = serverTemplate.bind(this.listeningPort).addListener(future -> {
@@ -71,6 +71,6 @@ public class EMVServer {
             }
         }).sync();
 
-        f.channel().closeFuture().sync();
+        return f.channel().closeFuture();
     }
 }

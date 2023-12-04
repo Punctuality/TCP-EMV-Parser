@@ -8,5 +8,6 @@ public class CleaningHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ReferenceCountUtil.release(msg);
+        ctx.fireChannelReadComplete();
     }
 }

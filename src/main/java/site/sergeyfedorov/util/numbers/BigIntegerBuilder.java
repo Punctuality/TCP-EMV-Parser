@@ -10,7 +10,7 @@ public class BigIntegerBuilder {
     }
 
     public void addDigit(int digit) {
-        if (digit < 0 || digit > 9) {
+        if (!DigitChecker.isDigit(digit)) {
             throw new IllegalArgumentException("Digit must be between 0 and 9");
         }
         numberBuilder.append(digit);

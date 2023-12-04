@@ -1,6 +1,6 @@
-package site.sergeyfedorov.transactions.repr;
+package site.sergeyfedorov.transaction.repr;
 
-import site.sergeyfedorov.transactions.model.Transaction;
+import site.sergeyfedorov.transaction.model.Transaction;
 
 import java.util.function.Function;
 
@@ -21,10 +21,10 @@ public class TransactionBeautifier implements Function<Transaction, String> {
             }
             """.formatted(
             transaction.kernel().getDisplayName(),
-            transaction.cardNumber().substring(0, 4),
+            transaction.cardNumber().substring(0, 6),
             discreetMode ?
-                "*".repeat(transaction.cardNumber().length() - 8) :
-                transaction.cardNumber().substring(4, transaction.cardNumber().length() - 4),
+                "*".repeat(transaction.cardNumber().length() - 10) :
+                transaction.cardNumber().substring(6, transaction.cardNumber().length() - 4),
             transaction.cardNumber().substring(transaction.cardNumber().length() - 4),
             transaction.cardNumber().length(),
             transaction.amount().toPlainString(),
