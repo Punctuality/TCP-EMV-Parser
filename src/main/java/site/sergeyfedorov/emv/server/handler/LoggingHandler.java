@@ -1,4 +1,4 @@
-package site.sergeyfedorov.server.handler;
+package site.sergeyfedorov.emv.server.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

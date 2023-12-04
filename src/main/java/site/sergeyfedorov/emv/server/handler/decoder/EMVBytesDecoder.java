@@ -1,9 +1,9 @@
-package site.sergeyfedorov.server.handler;
+package site.sergeyfedorov.emv.server.handler.decoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import site.sergeyfedorov.model.EMVRawTransfer;
+import site.sergeyfedorov.emv.model.EMVRawTransfer;
 
 import java.util.List;
 
