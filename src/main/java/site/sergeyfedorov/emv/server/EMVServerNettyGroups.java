@@ -1,11 +1,11 @@
-package site.sergeyfedorov.server;
+package site.sergeyfedorov.emv.server;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import site.sergeyfedorov.exceptions.ServerLifecycleException;
+import site.sergeyfedorov.emv.exceptions.ServerLifecycleException;
 
 import java.io.Closeable;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package site.sergeyfedorov.exceptions;
+package site.sergeyfedorov.emv.exceptions;
 
 public class ServerPipelineException extends RuntimeException{
     public ServerPipelineException(String message) {

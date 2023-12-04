@@ -1,27 +1,32 @@
-package site.sergeyfedorov.server;
+package site.sergeyfedorov.emv.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import site.sergeyfedorov.exceptions.ServerLifecycleException;
-import site.sergeyfedorov.server.handler.CleaningHandler;
-import site.sergeyfedorov.server.handler.EMVBytesDecoder;
-import site.sergeyfedorov.server.handler.EMVParser;
-import site.sergeyfedorov.server.handler.LoggingHandler;
+import site.sergeyfedorov.emv.exceptions.ServerLifecycleException;
+import site.sergeyfedorov.emv.server.handler.*;
+import site.sergeyfedorov.emv.server.handler.decoder.EMVBytesDecoder;
+import site.sergeyfedorov.emv.server.handler.decoder.EMVTransmissionDecoder;
 
 public class EMVServer {
-
     private static final Logger logger = LoggerFactory.getLogger(EMVServer.class);
 
     private final int listeningPort;
+    private final ChannelInboundHandlerAdapter[] userHandlers;
+
+    public EMVServer(int listeningPort, ChannelInboundHandlerAdapter... userHandlers) {
+        this.listeningPort = listeningPort;
+        this.userHandlers = userHandlers;
+    }
 
     public EMVServer(int listeningPort) {
-        this.listeningPort = listeningPort;
+        this(listeningPort, new ChannelInboundHandlerAdapter[0]);
     }
 
     private ServerBootstrap setupServer() {
@@ -38,8 +43,12 @@ public class EMVServer {
                     ch.pipeline().addLast(
                         new LoggingHandler(true),
                         new EMVBytesDecoder(),
-                        new EMVParser(),
-                        new LoggingHandler(true),
+                        new EMVTransmissionDecoder());
+
+                    ch.pipeline().addLast(userHandlers);
+
+                    ch.pipeline().addLast(
+                        new RespondingHandler(),
                         new CleaningHandler()
                     );
                 }

@@ -1,4 +1,4 @@
-package site.sergeyfedorov.model;
+package site.sergeyfedorov.emv.model.tag;
 
 import lombok.Getter;
 import site.sergeyfedorov.util.limits.Limited;
@@ -19,9 +19,9 @@ public enum EMVTagId {
     UNKNOWN();
 
     private final int tag;
-    private final EMVTagFormat format;
+    private final EMVTagFormat<?> format;
 
-    private static final Map<Integer, EMVTagId> mappedTags = new ConcurrentHashMap<>(values().length);
+    private static final Map<Integer, EMVTagId> mappedTags = new ConcurrentHashMap<>(values().length, 1.0F);
     static {
         for (EMVTagId tag : values()) mappedTags.put(tag.tag, tag);
     }
@@ -30,7 +30,7 @@ public enum EMVTagId {
         return mappedTags.getOrDefault(tag, UNKNOWN);
     }
 
-    EMVTagId(int tag, EMVTagFormat binaryEMVTag) {
+    EMVTagId(int tag, EMVTagFormat<?> binaryEMVTag) {
         this.tag = tag;
         this.format = binaryEMVTag;
     }

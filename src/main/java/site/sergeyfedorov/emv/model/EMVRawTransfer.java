@@ -1,4 +1,4 @@
-package site.sergeyfedorov.model;
+package site.sergeyfedorov.emv.model;
 
 import io.netty.buffer.ByteBuf;
 
