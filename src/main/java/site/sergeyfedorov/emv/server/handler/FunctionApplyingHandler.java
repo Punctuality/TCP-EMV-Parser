@@ -20,7 +20,7 @@ public class FunctionApplyingHandler<In, Out> extends ChannelInboundHandlerAdapt
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg.getClass().equals(classToken)) {
+        if (classToken.isAssignableFrom(msg.getClass())) {
             Out out = function.apply(classToken.cast(msg));
             ctx.fireChannelRead(out);
         } else {

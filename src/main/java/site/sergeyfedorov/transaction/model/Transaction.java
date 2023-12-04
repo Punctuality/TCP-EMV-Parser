@@ -1,4 +1,4 @@
-package site.sergeyfedorov.transactions.model;
+package site.sergeyfedorov.transaction.model;
 
 import java.math.BigDecimal;
 import java.util.Currency;

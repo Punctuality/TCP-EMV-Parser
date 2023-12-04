@@ -1,9 +1,8 @@
-package site.sergeyfedorov.transactions.model;
+package site.sergeyfedorov.transaction.model;
 
 import lombok.Getter;
 import site.sergeyfedorov.emv.model.tag.BinaryEMVTag;
 import site.sergeyfedorov.emv.model.tag.EMVTag;
-import site.sergeyfedorov.emv.model.tag.EMVTagId;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
