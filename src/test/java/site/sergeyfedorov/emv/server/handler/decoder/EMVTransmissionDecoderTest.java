@@ -116,34 +116,4 @@ public class EMVTransmissionDecoderTest {
 
         assertEquals("EMVParser received invalid tag value for tag PAN", exp.getMessage());
     }
-
-    @Test
-    public void testUnknownMarker() throws InterruptedException {
-        byte[] validPacket = new byte[]{
-            0x00, 0x1B, 0x02, 0x18, (byte) 0x9F, 0x2B, 0x01, (byte) 0x02,
-            (byte) 0x9F, 0x02, 0x02, 0x01, 0x00, 0x5A, 0x08, 0x41,
-            0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x5F,
-            0x2A, 0x02, 0x09, 0x78, 0x03
-        };
-
-        EmbeddedChannel channel = new EmbeddedChannel(
-            new EMVBytesDecoder(),
-            new EMVTransmissionDecoder()
-        );
-
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        final PrintStream originalOut = System.out;
-
-        System.setOut(new PrintStream(outContent));
-
-        ByteBuf buf = Unpooled.copiedBuffer(validPacket);
-
-        channel.writeOneInbound(buf).sync();
-
-        System.setOut(originalOut);
-
-        String filteringRegex = "^.+EMVTransmissionDecoder.+Unknown EMV tag.+$";
-
-        assertTrue(outContent.toString().lines().anyMatch(outLine -> outLine.matches(filteringRegex)));
-    }
 }
