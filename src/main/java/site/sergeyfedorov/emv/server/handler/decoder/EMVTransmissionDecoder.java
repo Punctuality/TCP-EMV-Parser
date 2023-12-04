@@ -28,15 +28,21 @@ public class EMVTransmissionDecoder extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (Objects.requireNonNull(msg) instanceof EMVRawTransfer(int msgLen, ByteBuf rawMessage)) {
-            EMVTransmission decodedMessage = new EMVTransmission(msgLen, parseSeqOfMessages(rawMessage));
-            ReferenceCountUtil.release(rawMessage);
-            ctx.fireChannelRead(decodedMessage);
+            try {
+                EMVTransmission decodedMessage = new EMVTransmission(msgLen, parseSeqOfMessages(rawMessage));
+                ctx.fireChannelRead(decodedMessage);
+            } catch (ServerPipelineException e) {
+                logger.error("EMVParser failed to parse message: %s".formatted(e.getMessage()));
+                ctx.fireExceptionCaught(e);
+            } finally {
+                ReferenceCountUtil.release(rawMessage);
+            }
         } else {
             throw new ServerPipelineException("EMVParser received non-ByteBuf message: %s".formatted(msg));
         }
     }
 
-    private EMVMessage[] parseSeqOfMessages(ByteBuf rawMessage) {
+    EMVMessage[] parseSeqOfMessages(ByteBuf rawMessage) {
         LinkedList<EMVMessage> messages = new LinkedList<>();
 
         Optional<EMVMessage> nextMsg = readOneMessage(rawMessage);
@@ -48,7 +54,7 @@ public class EMVTransmissionDecoder extends ChannelInboundHandlerAdapter {
         return messages.toArray(EMVMessage[]::new);
     }
 
-    private Optional<EMVMessage> readOneMessage(ByteBuf rawMessage) {
+    Optional<EMVMessage> readOneMessage(ByteBuf rawMessage) {
         if (!rawMessage.isReadable()) {
             return Optional.empty();
         }
@@ -75,7 +81,7 @@ public class EMVTransmissionDecoder extends ChannelInboundHandlerAdapter {
         return Optional.of(decodedMessage);
     }
 
-    private boolean isEndOfMessage(ByteBuf rawMessage) {
+    boolean isEndOfMessage(ByteBuf rawMessage) {
         if (!rawMessage.isReadable()) {
             throw new ServerPipelineException("EMVParser didn't receive ETX byte");
         }
@@ -87,7 +93,7 @@ public class EMVTransmissionDecoder extends ChannelInboundHandlerAdapter {
         return result;
     }
 
-    private EMVTag readOneTag(ByteBuf rawMessage) {
+    EMVTag readOneTag(ByteBuf rawMessage) {
         int rawTagId = retrieveEMVTagId(rawMessage);
         EMVTagId tagId = EMVTagId.lookByTag(rawTagId);
 
@@ -109,7 +115,7 @@ public class EMVTransmissionDecoder extends ChannelInboundHandlerAdapter {
     // TODO JavaDoc
     // Usually EMV tags are encoded in 1 or 2 bytes,
     // but sometimes they can be encoded in 3 bytes (We can support up to 4 bytes).
-    private int retrieveEMVTagId(ByteBuf rawMessage) {
+    int retrieveEMVTagId(ByteBuf rawMessage) {
         int tagId = rawMessage.readUnsignedByte();
 
         if ((tagId & TAG_FIRST_BYTE_MASK) == TAG_FIRST_BYTE_MASK) {
